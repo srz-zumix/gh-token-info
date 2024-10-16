@@ -6,20 +6,11 @@ env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  read-all:
+  test:
     runs-on: ubuntu-latest
     permissions: read-all
     steps:
       - uses: actions/checkout@v4
       - run: make install
-      - run: gh token-info scopes ${{ secrets.GITHUB_TOKEN }}
-      - run: gh token-info user ${{ secrets.GITHUB_TOKEN }}
-
-  write-all:
-    runs-on: ubuntu-latest
-    permissions: write-all
-    steps:
-      - uses: actions/checkout@v4
-      - run: make install
-      - run: gh token-info scopes ${{ secrets.GITHUB_TOKEN }}
-      - run: gh token-info user ${{ secrets.GITHUB_TOKEN }}
+      - run: gh token-info scopes ${{ secrets.TEST_GITHUB_TOKEN }}
+      - run: gh token-info user ${{ secrets.TEST_GITHUB_TOKEN }}
