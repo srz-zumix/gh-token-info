@@ -2,12 +2,21 @@ name: Test
 on:
   pull_request:
 
-permissions: read-all
-
 jobs:
-  test:
+  read-all:
     runs-on: ubuntu-latest
+    permissions: read-all
     steps:
       - uses: actions/checkout@v4
       - run: make install
-      - run: gh token-info ${{ secrets.GITHUB_TOKEN }}
+      - run: gh token-info scopes ${{ secrets.GITHUB_TOKEN }}
+      - run: gh token-info user ${{ secrets.GITHUB_TOKEN }}
+
+  write-all:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v4
+      - run: make install
+      - run: gh token-info scopes ${{ secrets.GITHUB_TOKEN }}
+      - run: gh token-info user ${{ secrets.GITHUB_TOKEN }}
