@@ -2,6 +2,9 @@ name: Test
 on:
   pull_request:
 
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   read-all:
     runs-on: ubuntu-latest
