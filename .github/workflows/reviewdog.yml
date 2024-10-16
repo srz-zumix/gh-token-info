@@ -1,24 +1,32 @@
-name: Lint
+name: reviewdog
 on:
   pull_request:
 
 permissions:
-  checks: write
   contents: read
   pull-requests: write
 
 jobs:
+  markdownlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: markdownlint
+        uses: reviewdog/action-markdownlint@v0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          
   shellcheck:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: reviewdog/action-shellcheck@v1
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
           path: "."
-          pattern: |
-            *.sh
-            gh-activity-report
+          pattern: "*.sh"
           exclude: "./.git/*"
 
   actionlint:
@@ -26,5 +34,3 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: reviewdog/action-actionlint@v1
-        with:
-          reporter: github-pr-review
