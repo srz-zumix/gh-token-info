@@ -2,6 +2,14 @@
 
 print github token info
 
+## Installation
+
+```sh
+gh extension install srz-zumix/gh-token-info
+```
+
+## Usage
+
 ```plain
   USAGE:
     gh token-info <command> <token>
