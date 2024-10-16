@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+msg() {
+  echo >&2 -e "${1-}"
+}
+
+die() {
+  local msg=$1
+  local code=${2-1} # default exit status 1
+  msg "$msg"
+  exit "$code"
+}
+
+usage() {
+  # shellcheck disable=SC1078
+  die "print github token info
+  
+  USAGE:
+    gh token-info <command> <token>
+
+  GENERAL COMMANDS:
+    scopes:    print token scopes
+    user:      print token user login name
+    dump:      print full token info
+" "$1"
+}
+
+if [ $# == 0 ]; then
+  usage 0
+fi
+
+if [ $# != 2 ]; then
+  usage 1
+fi
+
+case "${1-}" in
+  scopes)
+    gh api -H "Authorization: token $2" /user --verbose | grep -i 'x-oauth-scopes:' | cut -d':' -f2- | xargs -I{} echo "{}"
+    ;;
+  user)
+    gh api -H "Authorization: token $2" /user --jq '.login' | cat -
+    ;;
+  dump)
+    gh api -H "Authorization: token $2" /user --verbose
+    ;;
+  *)
+    usage 1
+    ;;
+esac
