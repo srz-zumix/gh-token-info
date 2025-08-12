@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions: read-all
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: make install
       - run: gh token-info scopes ${{ secrets.TEST_GITHUB_TOKEN }}
       - run: gh token-info user ${{ secrets.TEST_GITHUB_TOKEN }}
