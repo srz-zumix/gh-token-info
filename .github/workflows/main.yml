@@ -5,12 +5,17 @@ on:
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+permissions: {}
+
 jobs:
   test:
     runs-on: ubuntu-latest
-    permissions: read-all
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
       - run: make install
       - run: gh token-info scopes ${{ secrets.TEST_GITHUB_TOKEN }}
       - run: gh token-info user ${{ secrets.TEST_GITHUB_TOKEN }}
