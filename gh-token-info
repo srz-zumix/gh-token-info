@@ -30,19 +30,31 @@ if [ $# == 0 ]; then
   usage 0
 fi
 
-if [ $# != 2 ]; then
+if [ $# -lt 1 ] || [ $# -gt 2 ]; then
   usage 1
 fi
 
 case "${1-}" in
   scopes)
-    gh api -H "Authorization: token $2" /user --verbose | grep -i 'x-oauth-scopes:' | cut -d':' -f2- | xargs -I{} echo "{}"
+    if [ -n "${2-}" ]; then
+      gh api -H "Authorization: token $2" /user --verbose | grep -i 'x-oauth-scopes:' | cut -d':' -f2- | xargs -I{} echo "{}"
+    else
+      gh api /user --verbose | grep -i 'x-oauth-scopes:' | cut -d':' -f2- | xargs -I{} echo "{}"
+    fi
     ;;
   user)
-    gh api -H "Authorization: token $2" /user --jq '.login' | cat -
+    if [ -n "${2-}" ]; then
+      gh api -H "Authorization: token $2" /user --jq '.login' | cat -
+    else
+      gh api /user --jq '.login' | cat -
+    fi
     ;;
   dump)
-    gh api -H "Authorization: token $2" /user --verbose
+    if [ -n "${2-}" ]; then
+      gh api -H "Authorization: token $2" /user --verbose
+    else
+      gh api /user --verbose
+    fi
     ;;
   *)
     usage 1
